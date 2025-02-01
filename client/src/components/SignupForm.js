@@ -67,7 +67,7 @@ const SignupForm = () => {
                     />
                     {/* Buttons Section */}
                     <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%", mt: 2 }}>
-                        <Button variant="contained" color="primary">
+                        <Button variant="contained" color="primary" onClick={() => navigate("/login")}>
                             Create Account
                         </Button>
                         <Button variant="text" color="secondary" onClick={() => navigate("/login")}>

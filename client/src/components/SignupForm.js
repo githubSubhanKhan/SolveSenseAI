@@ -1,24 +1,45 @@
 import React, { useState } from "react";
 import { TextField, Button, Box, Typography, Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import CustomAlert from "./Alert"; // Import the Alert component
 
 const SignupForm = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        email: "",
+        username: "",
         password: "",
         confirmPassword: "",
     });
+    const [alert, setAlert] = useState({ open: false, message: "", severity: "error" });
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Here you can add validation and API call
-        console.log("Form Submitted:", formData);
-        navigate("/login");
+        setAlert({ open: false, message: "", severity: "error" });
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}auth/register`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "Something went wrong");
+            }
+
+            setAlert({ open: true, message: "User registered successfully!", severity: "success" });
+            setTimeout(() => navigate("/login"), 2000); // Redirect after 2 sec
+        } catch (err) {
+            setAlert({ open: true, message: err.message, severity: "error" });
+        }
     };
 
     return (
@@ -35,12 +56,14 @@ const SignupForm = () => {
                 <Typography variant="h2" gutterBottom>
                     Signup
                 </Typography>
+                <CustomAlert open={alert.open} onClose={() => setAlert({ ...alert, open: false })} message={alert.message} severity={alert.severity} />
+                
                 <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
                     <TextField
                         fullWidth
-                        label="Email"
-                        name="email"
-                        value={formData.email}
+                        label="Username"
+                        name="username"
+                        value={formData.username}
                         onChange={handleChange}
                         margin="normal"
                         required
@@ -65,16 +88,14 @@ const SignupForm = () => {
                         margin="normal"
                         required
                     />
-                    {/* Buttons Section */}
                     <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%", mt: 2 }}>
-                        <Button variant="contained" color="primary" onClick={() => navigate("/login")}>
+                        <Button type="submit" variant="contained" color="primary">
                             Create Account
                         </Button>
                         <Button variant="text" color="secondary" onClick={() => navigate("/login")}>
                             Already have an account?
                         </Button>
                     </Box>
-
                 </Box>
             </Box>
         </Container>

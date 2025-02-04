@@ -80,10 +80,10 @@ const Home = () => {
       <Drawer
         variant="permanent"
         sx={{
-          width: open ? 180 : 50,
+          width: open ? 150 : 50,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: open ? 180 : 50,
+            width: open ? 140 : 50,
             transition: "width 0.3s",
             display: "flex",
             flexDirection: "column",
@@ -96,17 +96,9 @@ const Home = () => {
         <IconButton onClick={toggleDrawer} sx={{ alignSelf: "flex-end" }}>
           {open ? <ChevronLeft /> : <ChevronRight />}
         </IconButton>
-        <Box sx={{ width: "100%", textAlign: "center", mt: 2 }}>
+        <Box sx={{ width: "100%", textAlign: "center"}}>
           <Typography variant="h6">Logo</Typography>
         </Box>
-        <List sx={{ width: "100%", flexGrow: 1, mt: 2 }}>
-          <ListItem button>
-            <ListItemText primary={open ? "Menu Item 1" : ""} />
-          </ListItem>
-          <ListItem button>
-            <ListItemText primary={open ? "Menu Item 2" : ""} />
-          </ListItem>
-        </List>
         <Box sx={{ width: "100%", display: "flex", alignItems: "center", justifyContent: open ? "flex-start" : "center", mb: 2, px: open ? 2 : 0 }}>
           <Avatar src="https://via.placeholder.com/100" sx={{ width: 40, height: 40 }} />
           {open && (

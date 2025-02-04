@@ -34,6 +34,7 @@ const Login = () => {
 
       // Show success alert
       setAlert({ open: true, message: "User login successfully!", severity: "success" });
+      localStorage.setItem('username', data.username);
       setTimeout(() => navigate("/home"), 2000);
     } catch (err) {
       setAlert({ open: true, message: err.message, severity: "error" });

@@ -1,23 +1,43 @@
 import React, { useState } from "react";
 import { TextField, Button, Box, Typography, Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import CustomAlert from "./Alert";
 
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
+
+  const [alert, setAlert] = useState({ open: false, message: "", severity: "error" });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you can add authentication logic
-    console.log("Login Submitted:", formData);
-    navigate("/home");
+    setAlert({ open: false, message: "", severity: "error" });
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Login failed");
+      }
+
+      // Show success alert
+      setAlert({ open: true, message: "User login successfully!", severity: "success" });
+      setTimeout(() => navigate("/home"), 2000);
+    } catch (err) {
+      setAlert({ open: true, message: err.message, severity: "error" });
+    }
   };
 
   return (
@@ -34,12 +54,13 @@ const Login = () => {
         <Typography variant="h4" gutterBottom>
           Login
         </Typography>
+        <CustomAlert open={alert.open} onClose={() => setAlert({ ...alert, open: false })} message={alert.message} severity={alert.severity} />
         <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
           <TextField
             fullWidth
-            label="Email"
-            name="email"
-            value={formData.email}
+            label="Username"
+            name="username"
+            value={formData.username}
             onChange={handleChange}
             margin="normal"
             required

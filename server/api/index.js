@@ -4,18 +4,25 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config({ path: '../.env' });
 
+const app = express();
+
 // Import routes
 const authRoutes = require('./routes/auth');
 const chatRoutes = require('./routes/chat');
 
 connectToMongo();
 
-
-const app = express();
-
-// Middleware
-app.use(cors());
 app.use(bodyParser.json());
+
+
+// Enable CORS only for your frontend origin
+const corsOptions = {
+    origin: ['http://localhost:3000', 'solve-sense-ai.vercel.app'],
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
 
 // Routes
 app.use('/api/auth', authRoutes);

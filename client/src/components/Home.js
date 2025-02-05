@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Box, AppBar, Toolbar, Typography, TextField, Button, Avatar, Container, Paper } from "@mui/material";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import CustomAlert from "./Alert";
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const [alert, setAlert] = useState({ open: false, message: "", severity: "error" });
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [showInitialText, setShowInitialText] = useState(true);
@@ -68,6 +73,14 @@ const Home = () => {
     }
   };
 
+  const handleLogout = () => {
+    setAlert({ open: true, message: "User logout successfully!", severity: "success" });
+    localStorage.removeItem("username");
+    setTimeout(() => {
+      navigate("/login");
+    }, 2000);
+  };
+
   return (
     <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
       <AppBar position="sticky" sx={{ bgcolor: "primary.main" }}>
@@ -76,9 +89,12 @@ const Home = () => {
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Avatar src="https://via.placeholder.com/100" sx={{ width: 40, height: 40, mr: 1 }} />
             <Typography variant="body1">{username}</Typography>
+            <Button variant="contained" sx={{ bgcolor: "white", color: "black", '&:hover': { bgcolor: "#f0f0f0" }, ml: 2 }} onClick={handleLogout}>Logout</Button>
           </Box>
         </Toolbar>
       </AppBar>
+
+      <CustomAlert open={alert.open} onClose={() => setAlert({ ...alert, open: false })} message={alert.message} severity={alert.severity} />
       
       <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column", alignItems: "center", overflowY: "auto", justifyContent: messages.length === 0 ? "center" : "flex-start", p: 3 }}>
         {showInitialText && (

@@ -2,6 +2,7 @@ const connectToMongo = require('./config/db')
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+require('dotenv').config({ path: '../.env' });
 
 // Import routes
 const authRoutes = require('./routes/auth');

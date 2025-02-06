@@ -76,14 +76,14 @@ const Login = () => {
             margin="normal"
             required
           />
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            sx={{ mt: 2 }}
-          >
-            Login
-          </Button>
+          <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%", mt: 2 }}>
+            <Button type="submit" variant="contained" color="primary">
+              Login
+            </Button>
+            <Button variant="text" color="secondary" onClick={() => navigate("/signup")}>
+              Don't have an account?
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Container>
